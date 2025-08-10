@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clean Dash — Octo Edition · The Clean Home Crew LLC</title>
+<meta name="description" content="Clean Dash: an endless‑runner where your octopus mascot scrubs grime at speed. Share your high score!" />
+<meta property="og:title" content="Clean Dash — by The Clean Home Crew LLC">
+<meta property="og:description" content="Subway Surfers vibe, but you’re an octopus with a sponge. Swipe, scrub, score.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://thecleanhomecrew.com/wp-content/uploads/2024/01/og-clean-home-crew.jpg">
+<meta property="og:url" content="https://example.com/cleandash">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="data:image/svg+xml;utf8,
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>
+  <rect width='64' height='64' rx='12' fill='%232f67ff'/>
+  <circle cx='34' cy='28' r='12' fill='%23ff6f8f'/>
+  <rect x='14' y='40' width='36' height='8' rx='4' fill='%23ffd43b'/>
+</svg>">
+
+<style>
+  /* ===== Brand palette (from your card) ===== */
+  :root{
+    --blue:#2f67ff;       /* primary */
+    --blue-2:#1f47d8;     /* darker */
+    --yellow:#ffd43b;     /* sponge */
+    --pink:#ff6f8f;       /* octopus */
+    --ink:#1f2b37;        /* text */
+    --bg:#ffffff;
+    --muted:#7c8b98;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .container{max-width:1100px;margin:0 auto;padding:24px}
+
+  header{background:linear-gradient(145deg,var(--blue) 0%, var(--blue-2) 70%);color:#fff}
+  header .container{padding:48px 24px 28px}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:18px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{
+    width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;
+    box-shadow:0 6px 16px rgba(0,0,0,.12);font-size:26px
+  }
+  nav a{background:rgba(255,255,255,.18);padding:8px 12px;border-radius:999px;color:#fff;margin-left:6px}
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
+  .hero h1{font-size:clamp(28px,4vw,48px);margin:10px 0 8px}
+  .hero p{font-size:18px;opacity:.95;margin:0 0 18px}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;border:2px solid transparent;
+       background:#fff;color:#0f172a;font-weight:800;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,.08)}
+  .btn.primary{background:var(--yellow);color:#231800}
+  .btn.ghost{background:transparent;border-color:#fff;color:#fff}
+  .note{font-size:13px;color:#eef2ff;margin-top:6px}
+
+  .game-wrap{background:#fff;border-radius:18px;padding:14px;box-shadow:0 10px 28px rgba(0,0,0,.12);position:relative}
+  canvas{width:100%;height:auto;border-radius:14px;background:linear-gradient(#eaf1ff,#fff)}
+  .hud{position:absolute;top:10px;left:14px;right:14px;display:flex;justify-content:space-between;color:#0a1a44;font-weight:800}
+  .hud .badge{background:rgba(255,255,255,.75);padding:8px 12px;border-radius:12px;border:1px solid rgba(0,0,0,.05)}
+  .mobile-controls{display:flex;gap:10px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+  .m-btn{flex:1;min-width:120px;background:var(--blue);color:white;padding:12px 14px;border-radius:12px;border:none;font-weight:800}
+
+  .section{padding:56px 24px}
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 8px 18px rgba(0,0,0,.06)}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .email-form{display:flex;gap:10px}
+  .email-form input{flex:1;padding:12px 14px;border-radius:10px;border:1px solid #d6e0e7}
+  .email-form button{padding:12px 14px;border-radius:10px;background:var(--blue);color:white;border:none;font-weight:800}
+  footer{background:#0e1b33;color:#c6d1e0}
+  footer a{color:#b3c7ff}
+  @media (max-width:960px){.hero{grid-template-columns:1fr}.features{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">🐙</div>
+          <div>
+            <strong>The Clean Home Crew LLC</strong><br>
+            <span style="font-size:12px;opacity:.9">Veteran‑Owned · Eco‑Friendly · Fully Insured</span>
+          </div>
+        </div>
+        <nav>
+          <a href="#play">Play</a>
+          <a href="#how">How to Play</a>
+          <a href="#share">Share</a>
+          <a href="https://thecleanhomecrew.com/" target="_blank" rel="noopener">Book a Cleaning</a>
+        </nav>
+      </div>
+
+      <div class="hero">
+        <div>
+          <h1>Clean Dash — Octo Edition</h1>
+          <p>Swipe between lanes and help our friendly octopus scrub grime with a bright yellow sponge. Stack combos, grab eco‑bubbles, and chase a squeaky‑clean high score!</p>
+          <div class="cta-row">
+            <a class="btn primary" href="#play">🕹️ Play in Browser</a>
+            <button class="btn ghost" id="shareBtn">🔗 Share</button>
+          </div>
+          <div class="note">Mobile + desktop. Hold <kbd>Space</kbd> (or tap “Scrub”) when overlapping a stain.</div>
+        </div>
+        <div class="game-wrap" aria-label="Game preview">
+          <div class="hud">
+            <div class="badge">Score: <span id="hudScore">0</span></div>
+            <div class="badge">Best: <span id="hudBest">0</span></div>
+            <div class="badge">Lives: <span id="hudLives">3</span></div>
+          </div>
+          <canvas id="game" width="600" height="900" role="img" aria-label="Clean Dash Game Canvas"></canvas>
+          <div class="mobile-controls" aria-label="Game controls">
+            <button class="m-btn" id="leftBtn">◀️ Left</button>
+            <button class="m-btn" id="scrubBtn">🧽 Scrub</button>
+            <button class="m-btn" id="rightBtn">Right ▶️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section container" id="how">
+      <div class="grid-2">
+        <div>
+          <h2>How to Play</h2>
+          <ol>
+            <li><strong>Move:</strong> Swipe left/right (mobile) or use arrow keys.</li>
+            <li><strong>Scrub:</strong> Hold <em>Scrub</em> or press <kbd>Space</kbd> while overlapping a stain.</li>
+            <li><strong>Combo:</strong> Clean streaks to boost your multiplier.</li>
+            <li><strong>Eco‑Boost:</strong> Green bubbles add score and a short shield.</li>
+          </ol>
+        </div>
+        <div>
+          <h2>About The Clean Home Crew</h2>
+          <p>Veteran‑owned, fully insured, eco‑friendly supplies, and budget‑friendly, transparent pricing. We serve any city within 100 miles of Austin and 50 miles of La Grange, TX.</p>
+          <p><a href="https://thecleanhomecrew.com/" target="_blank" rel="noopener">Get a free quote →</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="play">
+      <h2 style="text-align:center;margin-top:-8px">Beat the high score!</h2>
+      <form class="email-form" onsubmit="event.preventDefault(); alert('Thanks! We’ll ping you when new levels drop.');" style="justify-content:center">
+        <input type="email" placeholder="Get updates (optional)" aria-label="Email for updates">
+        <button>Notify Me</button>
+      </form>
+    </section>
+
+    <section class="section container" id="share">
+      <div class="grid-2">
+        <div class="card">
+          <h3>Share with friends, family & customers</h3>
+          <p>Use the Share button or copy the link below.</p>
+          <div style="display:flex;gap:8px">
+            <input id="shareLink" value="https://example.com/cleandash" style="flex:1;padding:10px;border:1px solid #d6e0e7;border-radius:10px" readonly>
+            <button class="btn" id="copyBtn">Copy</button>
+          </div>
+          <p style="font-size:13px;color:#64748b">Replace with your real URL after upload.</p>
+        </div>
+        <div class="card">
+          <h3>Run a fun promo</h3>
+          <ul>
+            <li>QR code at booths; top score wins a discount.</li>
+            <li>Post weekly leaderboards on socials.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="text-align:center">
+      © <span id="yr"></span> The Clean Home Crew LLC · 100% Satisfaction Guarantee
+    </div>
+  </footer>
+
+<script>
+/* ===== Sharing ===== */
+const shareBtn=document.getElementById('shareBtn');
+const copyBtn=document.getElementById('copyBtn');
+const shareLink=document.getElementById('shareLink');
+shareBtn?.addEventListener('click',async()=>{
+  const url=shareLink.value;
+  const data={title:'Clean Dash',text:'Help our octopus clean! 🧽',url};
+  try{ if(navigator.share){await navigator.share(data);} else {await navigator.clipboard.writeText(url); alert('Link copied!');} }catch(e){}
+});
+copyBtn?.addEventListener('click',async()=>{ try{await navigator.clipboard.writeText(shareLink.value); alert('Copied!');}catch(e){} });
+document.getElementById('yr').textContent=new Date().getFullYear();
+
+/* ===== Game (Octopus runner) ===== */
+const cvs=document.getElementById('game'), ctx=cvs.getContext('2d');
+let W=cvs.width, H=cvs.height;
+const lanes=[W*0.22,W*0.5,W*0.78];
+
+let playerLane=1, score=0, best=+localStorage.getItem('cleandash_best')||0, lives=3;
+let speed=4, running=true, scrubbing=false, frame=0, combo=0, shieldTimer=0;
+const hudScore=document.getElementById('hudScore'), hudBest=document.getElementById('hudBest'), hudLives=document.getElementById('hudLives');
+hudBest.textContent=best;
+
+const colors={blue:getCSS('--blue'), blue2:getCSS('--blue-2'), yellow:getCSS('--yellow'), pink:getCSS('--pink')};
+function getCSS(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+/* Entities */
+const things=[]; // {lane,y,kind:'grime'|'boost'}
+function spawn(){
+  const lane=Math.floor(Math.random()*3);
+  const kind=Math.random()<0.12?'boost':'grime';
+  things.push({lane,y:-60,kind});
+}
+
+/* Background */
+function drawBackground(){
+  ctx.fillStyle='#eef3ff'; ctx.fillRect(0,0,W,H);
+  // lane separators
+  ctx.setLineDash([10,18]); ctx.strokeStyle='#bccbff'; ctx.lineWidth=3;
+  [0.36,0.64].forEach(x=>{ ctx.beginPath(); ctx.moveTo(W*x,0); ctx.lineTo(W*x,H); ctx.stroke(); });
+  ctx.setLineDash([]);
+  // motion streaks
+  ctx.strokeStyle='rgba(47,103,255,.15)'; ctx.lineWidth=2;
+  for(let y=(frame*speed)%60; y<H; y+=60){ ctx.beginPath(); ctx.moveTo(W*0.1,y); ctx.lineTo(W*0.9,y+10); ctx.stroke(); }
+}
+
+/* Player (Octopus) */
+const player={y:H*0.76, size:84};
+function drawOctopus(x,y){
+  ctx.save(); ctx.translate(x,y);
+  // shadow
+  ctx.fillStyle='rgba(0,0,0,.08)'; ctx.beginPath(); ctx.ellipse(0,28,46,10,0,0,Math.PI*2); ctx.fill();
+  // body
+  ctx.fillStyle=colors.pink;
+  ctx.beginPath(); ctx.ellipse(0,-6,44,38,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-40,5); ctx.quadraticCurveTo(0,18,40,5); ctx.quadraticCurveTo(6,28,-6,28); ctx.closePath(); ctx.fill();
+  // eyes
+  ctx.fillStyle='#1a1a1a'; ctx.beginPath(); ctx.arc(-14,-10,5,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(14,-10,5,0,Math.PI*2); ctx.fill();
+  // smile
+  ctx.strokeStyle='#b4002b'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(0,-2,8,0,Math.PI); ctx.stroke();
+  // hat
+  ctx.fillStyle=colors.blue; ctx.beginPath(); ctx.ellipse(-4,-32,28,12,-0.2,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle=colors.blue2; ctx.fillRect(-28,-30,56,6);
+  // tentacles
+  const t=frame/10, amp=6;
+  function tent(ax,ay,len,dir){
+    ctx.strokeStyle=colors.pink; ctx.lineWidth=16; ctx.lineCap='round';
+    ctx.beginPath();
+    ctx.moveTo(ax,ay);
+    const c1x=ax+dir*(len*0.4), c1y=ay+8+Math.sin(t+ax)*amp;
+    const c2x=ax+dir*(len*0.7), c2y=ay+16+Math.cos(t+ax)*amp;
+    ctx.bezierCurveTo(c1x,c1y,c2x,c2y, ax+dir*len, ay+24);
+    ctx.stroke();
+  }
+  tent(-28,14,42,-1);
+  tent(-8,20,46,-1);
+  tent(8,20,46,1);
+  tent(28,14,42,1);
+  // front/right tentacle holding sponge
+  ctx.strokeStyle=colors.pink; ctx.lineWidth=16; ctx.lineCap='round';
+  ctx.beginPath();
+  ctx.moveTo(16,18);
+  const wob=6+Math.sin(t*1.2)*4;
+  ctx.bezierCurveTo(28,26, 36,26+wob, 44,24+wob);
+  ctx.stroke();
+  // sponge
+  ctx.save(); ctx.translate(44,24+wob); ctx.rotate(-0.15);
+  ctx.fillStyle=colors.yellow; ctx.strokeStyle='#d4b11f'; ctx.lineWidth=2;
+  ctx.fillRect(-28,-14,56,28); ctx.strokeRect(-28,-14,56,28);
+  if(scrubbing){
+    for(let i=0;i<6;i++){
+      const bx=(Math.random()*46)-23, by=-18-Math.random()*18;
+      ctx.fillStyle='rgba(173,230,255,.7)';
+      ctx.beginPath(); ctx.arc(bx,by,5+Math.random()*5,0,Math.PI*2); ctx.fill();
+    }
+  }
+  ctx.restore();
+  // small badge on chest
+  ctx.fillStyle='#fff'; ctx.fillRect(-6,2,12,10); ctx.fillStyle=colors.blue; ctx.fillRect(-4,4,8,2);
+  ctx.restore();
+}
+
+/* Items */
+function drawThing(s){
+  const x=lanes[s.lane], y=s.y;
+  if(s.kind==='grime'){
+    ctx.fillStyle='#6d7a85';
+    ctx.beginPath(); ctx.ellipse(x, y, 40, 26, 0, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.4)';
+    ctx.beginPath(); ctx.ellipse(x-10, y-8, 16, 8, .5, 0, Math.PI*2); ctx.fill();
+  }else{
+    // Eco-boost bubble (green-ish)
+    const gr=ctx.createRadialGradient(x,y,6,x,y,26);
+    gr.addColorStop(0,'rgba(0,180,110,.9)');
+    gr.addColorStop(1,'rgba(0,180,110,.2)');
+    ctx.fillStyle=gr; ctx.beginPath(); ctx.arc(x,y,24,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#fff'; ctx.font='bold 16px system-ui'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('ECO',x,y);
+  }
+}
+
+/* Logic */
+function laneX(i){ return lanes[i]; }
+function reset(){ things.length=0; score=0; combo=0; lives=3; speed=4; running=true; frame=0; shieldTimer=0; playerLane=1; }
+function moveLeft(){ playerLane=Math.max(0,playerLane-1); }
+function moveRight(){ playerLane=Math.min(2,playerLane+1); }
+
+/* Controls */
+const leftBtn=document.getElementById('leftBtn');
+const rightBtn=document.getElementById('rightBtn');
+const scrubBtn=document.getElementById('scrubBtn');
+leftBtn.addEventListener('click',moveLeft);
+rightBtn.addEventListener('click',moveRight);
+scrubBtn.addEventListener('pointerdown',()=>scrubbing=true);
+scrubBtn.addEventListener('pointerup',()=>scrubbing=false);
+scrubBtn.addEventListener('pointerleave',()=>scrubbing=false);
+
+// Swipe on canvas
+let touchX=0,touchY=0,moved=false;
+cvs.addEventListener('touchstart',e=>{const t=e.changedTouches[0];touchX=t.clientX;touchY=t.clientY;moved=false;},{passive:true});
+cvs.addEventListener('touchmove',e=>{
+  const t=e.changedTouches[0]; const dx=t.clientX-touchX; const dy=t.clientY-touchY;
+  if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy) && !moved){ if(dx<0) moveLeft(); else moveRight(); moved=true; }
+},{passive:true});
+cvs.addEventListener('touchend',()=>{scrubbing=false;},{passive:true});
+
+window.addEventListener('keydown',e=>{
+  if(e.code==='ArrowLeft') moveLeft();
+  if(e.code==='ArrowRight') moveRight();
+  if(e.code==='Space') scrubbing=true;
+  if(!running && (e.code==='Space'||e.code==='Enter')) reset();
+});
+window.addEventListener('keyup',e=>{ if(e.code==='Space') scrubbing=false; });
+
+/* Loop */
+function update(){
+  if(!running) return;
+  frame++;
+  // spawn rate increases with score
+  if(frame % Math.max(22, 70 - Math.floor(score/20)) === 0) spawn();
+  // speed up gradually
+  if(frame % 180 === 0) speed = Math.min(14, speed + 0.25);
+  // move items
+  for(const s of things) s.y += speed;
+
+  // collisions/cleaning
+  for(let i=things.length-1;i>=0;i--){
+    const s=things[i];
+    if(s.y>H+40){ things.splice(i,1); continue; }
+    const sameLane = s.lane===playerLane;
+    const close = Math.abs((player.y-10)-s.y) < 44;
+    if(sameLane && close){
+      if(s.kind==='grime'){
+        if(scrubbing){ // cleaned
+          things.splice(i,1);
+          combo=Math.min(10,combo+1);
+          const mult=1+combo*0.1;
+          score += Math.floor(10*mult);
+        }else if(shieldTimer>0){ // shield absorbs
+          things.splice(i,1); shieldTimer=0; combo=0;
+        }else{ // hit
+          things.splice(i,1); combo=0; lives--;
+          playerLane = Math.max(0, Math.min(2, playerLane + (Math.random()<.5?-1:1)));
+          if(lives<=0){ running=false; best=Math.max(best,score); localStorage.setItem('cleandash_best',best); }
+        }
+      }else{ // boost
+        things.splice(i,1); score += 25; shieldTimer = 360; // ~6s at 60fps
+      }
+    }
+  }
+  if(shieldTimer>0) shieldTimer--;
+
+  // HUD
+  hudScore.textContent=score;
+  hudBest.textContent=Math.max(best,score);
+  hudLives.textContent=lives;
+}
+
+function render(){
+  drawBackground();
+  for(const s of things) drawThing(s);
+  drawOctopus(laneX(playerLane), player.y);
+  if(shieldTimer>0){
+    ctx.strokeStyle='rgba(24,165,88,.6)'; ctx.lineWidth=6;
+    ctx.beginPath(); ctx.arc(laneX(playerLane), player.y-6, 50, 0, Math.PI*2); ctx.stroke();
+  }
+  if(!running){
+    ctx.fillStyle='rgba(15,40,81,.75)'; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#fff'; ctx.textAlign='center';
+    ctx.font='bold 44px system-ui'; ctx.fillText('Game Over', W/2, H/2 - 40);
+    ctx.font='600 22px system-ui'; ctx.fillText(`Score: ${score}   •   Best: ${Math.max(best,score)}`, W/2, H/2);
+    ctx.font='600 18px system-ui'; ctx.fillText('Press Space/Enter to play again', W/2, H/2 + 40);
+  }
+}
+
+function loop(){ update(); render(); requestAnimationFrame(loop); }
+loop();
+
+/* Retina-friendly resize */
+function resizeCanvasForDisplay(){
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  const cssW=cvs.clientWidth;
+  const cssH=Math.floor(cssW*1.5);
+  cvs.style.height=cssH+'px';
+  cvs.width=Math.floor(cssW*dpr);
+  cvs.height=Math.floor(cssH*dpr);
+  W=cvs.width; H=cvs.height;
+  lanes[0]=W*0.22; lanes[1]=W*0.5; lanes[2]=W*0.78;
+  player.y=H*0.76;
+}
+new ResizeObserver(resizeCanvasForDisplay).observe(cvs);
+resizeCanvasForDisplay();
+</script>
+</body>
+</html>
