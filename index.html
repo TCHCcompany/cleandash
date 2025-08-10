@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Clean Dash — Octo Edition · The Clean Home Crew LLC</title>
-<meta name="description" content="75-second octopus cleaner: scrub grime, dodge pets, grab a 20% off coupon. Swipe, scrub, score!" />
+<meta name="description" content="75‑second octopus cleaner: scrub grime of different sizes, dodge pets, and snag a 20% off coupon. Starts slow and speeds up every 15s." />
 <meta property="og:title" content="Clean Dash — by The Clean Home Crew LLC">
 <meta property="og:description" content="75-second octopus runner. Different spot sizes, pets to avoid, and a 20% off coupon each game.">
 <meta property="og:type" content="website">
@@ -26,7 +26,8 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
-  a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
   .container{max-width:1100px;margin:0 auto;padding:24px}
 
   header{background:linear-gradient(145deg,var(--blue) 0%, var(--blue-2) 70%);color:#fff}
@@ -46,25 +47,27 @@
 
   .game-wrap{background:#fff;border-radius:18px;padding:14px;box-shadow:0 10px 28px rgba(0,0,0,.12);position:relative}
   canvas{width:100%;height:auto;border-radius:14px;background:linear-gradient(#eaf1ff,#fff)}
-  .hud{position:absolute;top:10px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:center;color:#0a1a44;font-weight:800}
+  .hud{position:absolute;top:10px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:center;color:#0a1a44;font-weight:800;z-index:2}
   .hud .cluster{display:flex;gap:8px;flex-wrap:wrap}
   .badge{background:rgba(255,255,255,.82);padding:8px 12px;border-radius:12px;border:1px solid rgba(0,0,0,.05)}
   .coupon-pop{position:absolute;top:60px;left:50%;transform:translateX(-50%);background:#fff;border:2px dashed var(--green);color:#065f46;padding:10px 14px;border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,.15);display:none;z-index:5}
   .coupon-pop button{margin-left:8px;background:var(--green);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-weight:800}
 
-  .mobile-controls{display:flex;gap:10px;justify-content:center;margin-top:10px;flex-wrap:wrap}
-  .m-btn{flex:1;min-width:120px;background:var(--blue);color:white;padding:12px 14px;border-radius:12px;border:none;font-weight:800}
+  /* New mobile controls layout */
+  .mobile-controls{display:flex;flex-direction:column;gap:10px;justify-content:center;margin-top:10px}
+  .mobile-controls .lr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .m-btn{width:100%;background:var(--blue);color:#fff;padding:14px 16px;border-radius:12px;border:none;font-weight:800;font-size:16px}
+  .scrub-btn{width:100%;background:var(--yellow);color:#231800;padding:18px 16px;border-radius:14px;border:none;font-weight:900;font-size:18px;letter-spacing:.3px;box-shadow:0 6px 14px rgba(0,0,0,.08)}
 
   .section{padding:56px 24px}
-  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 8px 18px rgba(0,0,0,.06)}
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 8px 18px rgba(0,0,0,.06)}
   .email-form{display:flex;gap:10px}
   .email-form input{flex:1;padding:12px 14px;border-radius:10px;border:1px solid #d6e0e7}
   .email-form button{padding:12px 14px;border-radius:10px;background:var(--blue);color:white;border:none;font-weight:800}
   footer{background:#0e1b33;color:#c6d1e0}
   footer a{color:#b3c7ff}
-  @media (max-width:960px){.hero{grid-template-columns:1fr}.features{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}
+  @media (max-width:960px){.hero{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -89,7 +92,7 @@
       <div class="hero">
         <div>
           <h1>Clean Dash — Octo Edition</h1>
-          <p>75 seconds to scrub as much grime as you can. Different spot sizes = different points. Avoid scrubbing pets. Find the 20% off coupon!</p>
+          <p>75 seconds to scrub as much grime as you can. Different spot sizes = different points. Avoid scrubbing pets. Find the 20% off coupon! Starts slow and speeds up every 15s.</p>
           <div class="cta-row">
             <a class="btn primary" href="#play">🕹️ Play in Browser</a>
             <button class="btn ghost" id="shareBtn">🔗 Share</button>
@@ -113,9 +116,11 @@
           </div>
           <canvas id="game" width="600" height="900" role="img" aria-label="Clean Dash Game Canvas"></canvas>
           <div class="mobile-controls" aria-label="Game controls">
-            <button class="m-btn" id="leftBtn">◀️ Left</button>
-            <button class="m-btn" id="scrubBtn">🧽 Scrub</button>
-            <button class="m-btn" id="rightBtn">Right ▶️</button>
+            <div class="lr">
+              <button class="m-btn" id="leftBtn">◀️ Left</button>
+              <button class="m-btn" id="rightBtn">Right ▶️</button>
+            </div>
+            <button class="scrub-btn" id="scrubBtn">🧽 SCRUB (HOLD)</button>
           </div>
         </div>
       </div>
@@ -125,18 +130,17 @@
   <main>
     <section class="section container" id="how">
       <div class="grid-2">
-        <div>
+        <div class="card">
           <h2>How to Play</h2>
           <ol>
             <li><strong>Move:</strong> Swipe left/right (mobile) or use arrow keys.</li>
-            <li><strong>Scrub spots:</strong> Hold <em>Scrub</em> or press <kbd>Space</kbd>. 
-              <em>Small</em>=+10, <em>Medium</em>=+20, <em>Large</em>=+35.</li>
-            <li><strong>Coupon:</strong> One green ticket per game. Scrub it to collect a <strong>20% off</strong> code.</li>
-            <li><strong>Pets (cat 🐱 & dog 🐶):</strong> Passing through is okay, but <em>don’t scrub them</em>—that costs a life.</li>
-            <li><strong>Ramp:</strong> Everything speeds up across the 75 seconds.</li>
+            <li><strong>Scrub spots:</strong> Hold <em>Scrub</em> or press <kbd>Space</kbd>. Small=+10, Medium=+20, Large=+35.</li>
+            <li><strong>Coupon:</strong> One green ticket per game. Scrub to collect a <strong>20% off</strong> code.</li>
+            <li><strong>Pets (cat 🐱 & dog 🐶):</strong> Passing is fine, but <em>don’t scrub them</em>—that costs a life.</li>
+            <li><strong>Pacing:</strong> Starts slow, then speeds up at 15s, 30s, 45s, 60s (fastest in last 15s).</li>
           </ol>
         </div>
-        <div>
+        <div class="card">
           <h2>About The Clean Home Crew</h2>
           <p>Veteran‑owned, fully insured, eco‑friendly supplies, and budget‑friendly, transparent pricing. We serve any city within 100 miles of Austin and 50 miles of La Grange, TX.</p>
           <p><a href="https://thecleanhomecrew.com/" target="_blank" rel="noopener">Get a free quote →</a></p>
@@ -186,7 +190,7 @@ shareBtn?.addEventListener('click',async()=>{const url=shareLink.value;const dat
 copyBtn?.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(shareLink.value); alert('Copied!');}catch(e){}});
 document.getElementById('yr').textContent=new Date().getFullYear();
 
-/* ===== Game: 75-second Octo Runner ===== */
+/* ===== Game: 75-second Octo Runner with staged speed ===== */
 const cvs=document.getElementById('game'), ctx=cvs.getContext('2d');
 let W=cvs.width, H=cvs.height;
 const lanes=[W*0.22,W*0.5,W*0.78];
@@ -194,42 +198,37 @@ const lanes=[W*0.22,W*0.5,W*0.78];
 let playerLane=1, score=0, best=+localStorage.getItem('cleandash_best')||0, lives=3;
 let running=true, scrubbing=false, lastTs=performance.now(), elapsed=0; // seconds
 const ROUND_TIME=75; // seconds
-
 const hudScore=document.getElementById('hudScore'), hudBest=document.getElementById('hudBest'), hudLives=document.getElementById('hudLives'), hudTime=document.getElementById('hudTime');
 hudBest.textContent=best;
 
 const colors={blue:getCSS('--blue'), blue2:getCSS('--blue-2'), yellow:getCSS('--yellow'), pink:getCSS('--pink')};
 function getCSS(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
 
-/* Entities: stains, coupon, pets */
-const things=[]; 
-// thing: { lane, y, kind: 'stain'|'coupon'|'cat'|'dog', w, h, points }
+/* Entities */
+const things=[]; // {lane,y,kind:'stain'|'coupon'|'cat'|'dog', w,h, points}
 let couponSpawned=false, couponCollected=false, couponCode='';
-
 function rng(min,max){return Math.random()*(max-min)+min;}
 
-function spawn(progress){
-  // progress: 0..1 across 75s
-  // choose type by weights (more stains than pets)
+/* Spawn rules */
+function spawn(){
   const r=Math.random();
   let kind='stain';
   if(!couponSpawned && r<0.06){ kind='coupon'; couponSpawned=true; }
   else if(r<0.18){ kind = Math.random()<0.5?'cat':'dog'; }
-  // sizes for stains
+
   let w=44,h=28,points=20;
   if(kind==='stain'){
     const sizeRoll=Math.random();
     if(sizeRoll<0.4){ w=34; h=22; points=10; }          // small
     else if(sizeRoll<0.8){ w=48; h=30; points=20; }     // medium
     else { w=62; h=38; points=35; }                     // large
-  } else if(kind==='coupon'){
-    w=26; h=26; points=0;
-  } else { // pets
-    w=60; h=36; points=0;
-  }
+  }else if(kind==='coupon'){ w=26; h=26; points=0; }
+  else { w=60; h=36; points=0; }
+
   things.push({ lane:Math.floor(Math.random()*3), y:-60, kind, w, h, points });
 }
 
+/* Background */
 function drawBackground(frame){
   ctx.fillStyle='#eef3ff'; ctx.fillRect(0,0,W,H);
   ctx.setLineDash([10,18]); ctx.strokeStyle='#bccbff'; ctx.lineWidth=3;
@@ -239,7 +238,7 @@ function drawBackground(frame){
   for(let y=(frame*12)%60; y<H; y+=60){ ctx.beginPath(); ctx.moveTo(W*0.1,y); ctx.lineTo(W*0.9,y+10); ctx.stroke(); }
 }
 
-/* Octopus */
+/* Player (Octopus) */
 const player={y:H*0.76};
 function drawOctopus(x,y,frame){
   ctx.save(); ctx.translate(x,y);
@@ -276,64 +275,51 @@ function drawOctopus(x,y,frame){
   ctx.restore();
 }
 
-/* Draw things */
+/* Draw items */
 function drawThing(s){
   const x=lanes[s.lane], y=s.y;
   if(s.kind==='stain'){
     ctx.fillStyle='#6d7a85'; ctx.beginPath(); ctx.ellipse(x, y, s.w, s.h, 0, 0, Math.PI*2); ctx.fill();
     ctx.fillStyle='rgba(255,255,255,.4)'; ctx.beginPath(); ctx.ellipse(x-10, y-8, Math.max(10,s.w*0.35), Math.max(6,s.h*0.3), .5, 0, Math.PI*2); ctx.fill();
   }else if(s.kind==='coupon'){
-    // green ticket
     ctx.fillStyle='rgba(18,184,134,.9)';
-    ctx.beginPath(); ctx.roundRect(x-30,y-18,60,36,6); ctx.fill();
+    ctx.beginPath(); roundRect(ctx,x-30,y-18,60,36,6); ctx.fill();
     ctx.fillStyle='#fff'; ctx.font='bold 14px system-ui'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('20% OFF',x,y);
-  }else if(s.kind==='cat'){
-    drawCat(x,y,s);
-  }else if(s.kind==='dog'){
-    drawDog(x,y,s);
-  }
+  }else if(s.kind==='cat'){ drawCat(x,y,s); }
+  else if(s.kind==='dog'){ drawDog(x,y,s); }
 }
 
 function drawCat(x,y,s){
   ctx.save(); ctx.translate(x,y);
-  ctx.fillStyle='#444';
-  ctx.beginPath(); ctx.ellipse(0,0,s.w, s.h, 0, 0, Math.PI*2); ctx.fill(); // body
-  // ears
+  ctx.fillStyle='#444'; ctx.beginPath(); ctx.ellipse(0,0,s.w, s.h, 0, 0, Math.PI*2); ctx.fill();
   ctx.beginPath(); ctx.moveTo(-18,-10); ctx.lineTo(-6,-26); ctx.lineTo(6,-10); ctx.closePath(); ctx.fill();
   ctx.beginPath(); ctx.moveTo(18,-10); ctx.lineTo(6,-26); ctx.lineTo(-6,-10); ctx.closePath(); ctx.fill();
-  // face
-  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(-8,-2,4,0,Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(8,-2,4,0,Math.PI*2); ctx.fill();
-  ctx.fillStyle='#111'; ctx.beginPath(); ctx.arc(-8,-2,2,0,Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(8,-2,2,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(-8,-2,4,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(8,-2,4,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#111'; ctx.beginPath(); ctx.arc(-8,-2,2,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(8,-2,2,0,Math.PI*2); ctx.fill();
   ctx.restore();
 }
-
 function drawDog(x,y,s){
   ctx.save(); ctx.translate(x,y);
-  ctx.fillStyle='#8b5e3c';
-  ctx.beginPath(); ctx.ellipse(0,0,s.w, s.h, 0, 0, Math.PI*2); ctx.fill(); // body
-  // ears
+  ctx.fillStyle='#8b5e3c'; ctx.beginPath(); ctx.ellipse(0,0,s.w, s.h, 0, 0, Math.PI*2); ctx.fill();
   ctx.beginPath(); ctx.ellipse(-16,-16,8,12,0,0,Math.PI*2); ctx.fill();
   ctx.beginPath(); ctx.ellipse(16,-16,8,12,0,0,Math.PI*2); ctx.fill();
-  // face
   ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(0,-2,6,0,Math.PI*2); ctx.fill();
-  ctx.fillStyle='#111'; ctx.beginPath(); ctx.arc(-6,-6,2,0,Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(6,-6,2,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#111'; ctx.beginPath(); ctx.arc(-6,-6,2,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(6,-6,2,0,Math.PI*2); ctx.fill();
   ctx.restore();
 }
 
 /* Helpers */
 function laneX(i){return lanes[i];}
+function roundRect(ctx,x,y,w,h,r){const rr=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+rr,y);ctx.arcTo(x+w,y,x+w,y+h,rr);ctx.arcTo(x+w,y+h,x,y+h,rr);ctx.arcTo(x,y+h,x,y,rr);ctx.arcTo(x,y,x+w,y,rr);ctx.closePath();}
 function reset(){
   things.length=0; score=0; lives=3; running=true; lastTs=performance.now(); elapsed=0;
   playerLane=1; couponSpawned=false; couponCollected=false; couponCode=''; hideCouponPop();
 }
-function moveLeft(){ playerLane=Math.max(0,playerLane-1); }
-function moveRight(){ playerLane=Math.min(2,playerLane+1); }
 
 /* Controls */
 const leftBtn=document.getElementById('leftBtn'), rightBtn=document.getElementById('rightBtn'), scrubBtn=document.getElementById('scrubBtn');
+function moveLeft(){ playerLane=Math.max(0,playerLane-1); }
+function moveRight(){ playerLane=Math.min(2,playerLane+1); }
 leftBtn.addEventListener('click',moveLeft); rightBtn.addEventListener('click',moveRight);
 scrubBtn.addEventListener('pointerdown',()=>scrubbing=true);
 scrubBtn.addEventListener('pointerup',()=>scrubbing=false);
@@ -360,62 +346,70 @@ document.getElementById('copyCoupon').addEventListener('click',async()=>{
 });
 function showCouponPop(code){ couponCodeSpan.textContent=code; couponPop.style.display='block'; setTimeout(()=>couponPop.style.display='none', 4000); }
 function hideCouponPop(){ couponPop.style.display='none'; }
+function genCoupon(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code=''; for(let i=0;i<4;i++) code+=chars[Math.floor(Math.random()*chars.length)];
+  return 'TCHC20-'+code;
+}
+
+/* Difficulty schedule: steps every 15s (0–15,15–30,30–45,45–60,60–75) */
+const movementSpeeds=[4,6,8,10,14];     // affects fall speed (last is fastest)
+const spawnIntervals=[1.20,0.95,0.75,0.55,0.35]; // seconds between spawns (last is fastest)
+let spawnTimer=1.20;
+
+/* Feedback ring when hitting pet while scrubbing */
+let flashFrames=0, flashX=0, flashY=0;
+function flashAt(x,y){ flashFrames=18; flashX=x; flashY=y; }
 
 /* Loop */
 let frame=0;
 function update(dt){
   if(!running) return;
+
+  // time + end condition
   elapsed += dt;
-  if(elapsed>=ROUND_TIME){ running=false; } // time up
+  if(elapsed>=ROUND_TIME){ running=false; }
 
-  // difficulty ramp 0..1
-  const progress = Math.min(1, elapsed/ROUND_TIME);
-  const speed = lerp(3, 14, progress); // falls faster over time
-  // dynamic spawn: faster spawns later
-  const spawnEvery = lerp(0.9, 0.35, progress); // seconds between spawns
+  // Stage index 0..4
+  const stage = Math.min(4, Math.floor((elapsed/ROUND_TIME)*5));
+  const moveSpeed = movementSpeeds[stage];
+  const spawnEvery = spawnIntervals[stage];
 
-  // spawn timer
+  // Spawning
   spawnTimer -= dt;
   if(spawnTimer<=0){
-    spawn(progress);
-    spawnTimer = spawnEvery * (0.7 + Math.random()*0.6); // add a little randomness
+    spawn();
+    spawnTimer = spawnEvery * (0.8 + Math.random()*0.5); // slight randomness
   }
 
-  // move & resolve
+  // Move & collisions
   for(let i=things.length-1;i>=0;i--){
     const s=things[i];
-    s.y += speed*8; // tune fall speed
+    s.y += moveSpeed * 8; // tune factor if needed
     if(s.y>H+60){ things.splice(i,1); continue; }
 
     const sameLane = s.lane===playerLane;
     const close = Math.abs((player.y-6)-s.y) < Math.max(30, s.h+12);
+
     if(sameLane && close){
       if(s.kind==='stain'){
-        if(scrubbing){
-          score += s.points;
-          things.splice(i,1);
-        }else{
-          // bump but no life loss if not scrubbing (keeps focus on "clean vs avoid")
-        }
+        if(scrubbing){ score += s.points; things.splice(i,1); }
       }else if(s.kind==='coupon'){
         if(scrubbing && !couponCollected){
-          couponCollected=true;
+          couponCollected = true;
           couponCode = genCoupon();
           localStorage.setItem('tchc_last_coupon', couponCode);
           showCouponPop(couponCode);
-          things.splice(i,1);
-          // bonus points for collecting coupon
           score += 50;
+          things.splice(i,1);
         }
       }else if(s.kind==='cat' || s.kind==='dog'){
-        // pets are safe to pass, but penalize if scrubbing
+        // Passing is fine; scrubbing costs a life
         if(scrubbing){
           lives--;
-          // brief feedback: flash red circle
           flashAt(laneX(playerLane), player.y-10);
           if(lives<=0){ running=false; }
         }
-        // either way, let them pass through (don’t remove on contact)
       }
     }
   }
@@ -431,8 +425,14 @@ function render(){
   drawBackground(frame);
   for(const s of things) drawThing(s);
   drawOctopus(laneX(playerLane), player.y, frame);
+
+  if(flashFrames>0){
+    ctx.strokeStyle='rgba(228,87,87,.85)'; ctx.lineWidth=10;
+    ctx.beginPath(); ctx.arc(flashX,flashY,60,0,Math.PI*2); ctx.stroke();
+    flashFrames--;
+  }
+
   if(!running){
-    // End overlay
     ctx.fillStyle='rgba(15,40,81,.78)'; ctx.fillRect(0,0,W,H);
     ctx.fillStyle='#fff'; ctx.textAlign='center';
     const finalBest = Math.max(best,score);
@@ -451,7 +451,7 @@ function render(){
 }
 
 function loop(ts){
-  const dt = Math.min(0.05, (ts - lastTs)/1000); // cap dt
+  const dt = Math.min(0.05, (ts - lastTs)/1000); // cap dt for stability
   lastTs = ts;
   if(running) update(dt);
   render();
@@ -459,52 +459,8 @@ function loop(ts){
   requestAnimationFrame(loop);
 }
 
-/* Visual feedback for pet penalty */
-let flashFrames=0, flashX=0, flashY=0;
-function flashAt(x,y){ flashFrames=18; flashX=x; flashY=y; }
-const _render=render;
-render=function(){
-  drawBackground(frame);
-  for(const s of things) drawThing(s);
-  drawOctopus(laneX(playerLane), player.y, frame);
-  if(flashFrames>0){
-    ctx.strokeStyle='rgba(228,87,87,.85)'; ctx.lineWidth=10;
-    ctx.beginPath(); ctx.arc(flashX,flashY,60,0,Math.PI*2); ctx.stroke();
-    flashFrames--;
-  }
-  if(!running){
-    ctx.fillStyle='rgba(15,40,81,.78)'; ctx.fillRect(0,0,W,H);
-    ctx.fillStyle='#fff'; ctx.textAlign='center';
-    const finalBest = Math.max(best,score);
-    if(score>best){ best=score; localStorage.setItem('cleandash_best', best); }
-    ctx.font='bold 44px system-ui'; ctx.fillText(elapsed>=ROUND_TIME?'Time’s up!':'Game Over', W/2, H/2 - 60);
-    ctx.font='600 22px system-ui'; ctx.fillText(`Score: ${score}   •   Best: ${finalBest}`, W/2, H/2 - 20);
-    ctx.font='600 18px system-ui';
-    if(couponCollected){
-      ctx.fillText(`Your 20% OFF code: ${couponCode}`, W/2, H/2 + 16);
-      ctx.fillText(`Show at booking checkout or mention to our team.`, W/2, H/2 + 42);
-    }else{
-      ctx.fillText(`Missed the coupon? Try again for a chance to grab it.`, W/2, H/2 + 16);
-    }
-    ctx.fillText('Press Space/Enter to play again', W/2, H/2 + 70);
-  }
-}
-
-/* Spawn timing / utilities */
-let spawnTimer=0.8;
-function lerp(a,b,t){return a+(b-a)*t;}
-function genCoupon(){
-  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code=''; for(let i=0;i<4;i++) code+=chars[Math.floor(Math.random()*chars.length)];
-  return 'TCHC20-'+code;
-}
-
 /* Start */
-function start(){
-  reset(); // ensures fresh state
-  lastTs = performance.now();
-  requestAnimationFrame(loop);
-}
+function start(){ reset(); lastTs=performance.now(); requestAnimationFrame(loop); }
 start();
 
 /* Retina-friendly resize */
